@@ -59,14 +59,14 @@ int main(int argc, char *argv[])
 	{
 		if (argc != ARGS_COUNT)
 		{
-			throw logic_error("Неверное количество аргументов. Пример: triangle.exe 1 1 1");
+			throw logic_error("Некорректное количество аргументов. Пример: triangle.exe 1 1 1");
 		}
 
 		for (int i = 1; i < argc; ++i)
 		{
 			if (InvalidValue(argv[i]))
 			{
-				throw invalid_argument("Введено неверное значение. Значения сторон должны быть положительными числами больше нуля.");
+				throw invalid_argument("Введено некорректное значение. Значения сторон должны быть положительными числами больше нуля.");
 			}
 		}
 		
