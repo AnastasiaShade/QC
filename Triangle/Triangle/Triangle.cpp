@@ -7,6 +7,7 @@ using namespace std;
 
 static const int ARGS_COUNT = 4;
 static const char DELIMETER = ',';
+static const char DOT_DELIMETER = '.';
 
 bool InvalidValue(string arg)
 {
@@ -16,7 +17,7 @@ bool InvalidValue(string arg)
 	{
 		if (!isdigit(arg[i]))
 		{
-			if (arg[i] == DELIMETER && delimeterCounter < 1)
+			if ((arg[i] == DELIMETER || arg[i] == DOT_DELIMETER) && delimeterCounter < 1)
 			{
 				++delimeterCounter;
 			}
@@ -28,14 +29,14 @@ bool InvalidValue(string arg)
 		}
 	}
 
-	return !valid || stod(arg) <= 0;
+	return !valid || stod(arg) < 0;
 }
 
 void CheckTriangleType(double a, double b, double c)
 {
 	if (a + b <= c || a + c <= b || b + c <= a)
 	{
-		cout << "Не треугольник" << endl;
+		cout << "Не треугольник." << endl;
 	}
 	else if (a == b && a == c)
 	{
@@ -43,13 +44,38 @@ void CheckTriangleType(double a, double b, double c)
 	}
 	else if (a == b || a == c || b == c)
 	{
-		cout << "Равнобедренный треугольник" << endl;
+		cout << "Равнобедренный треугольник." << endl;
 	}
 	else
 	{
-		cout << "Обычный треугольник" << endl;
-		
+		cout << "Обычный треугольник." << endl;
 	}
+}
+
+double ConvertToNumber(string arg)
+{
+	double number = 0;
+	string intPart = "";
+	string floatPart = "";
+	auto delimeterPos = arg.find(DELIMETER);
+	if (delimeterPos == string::npos)
+	{
+		delimeterPos = arg.find(DOT_DELIMETER);
+	}
+
+	intPart = arg.substr(0, delimeterPos);
+	if (delimeterPos != string::npos)
+	{
+		floatPart = arg.substr(delimeterPos + 1, arg.size() - 1);
+	}
+	number = stoi(intPart);
+	number += (!floatPart.empty()) ? (stoi(floatPart) / pow(10, floatPart.size())) : 0;
+
+	if (number == 0)
+	{
+		throw invalid_argument("Введено некорректное значение. Значения сторон должны быть положительными числами больше нуля.");
+	}
+	return number;
 }
 
 int main(int argc, char *argv[])
@@ -70,9 +96,9 @@ int main(int argc, char *argv[])
 			}
 		}
 		
-		double a = stod(argv[1]);
-		double b = stod(argv[2]);
-		double c = stod(argv[3]);
+		double a = ConvertToNumber(argv[1]);
+		double b = ConvertToNumber(argv[2]);
+		double c = ConvertToNumber(argv[3]);
 
 		CheckTriangleType(a, b, c);
 	}
