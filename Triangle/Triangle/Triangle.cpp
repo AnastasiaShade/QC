@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
 
 		CheckTriangleType(a, b, c);
 	}
-	catch (std::exception &err)
+	catch (exception &err)
 	{
 		cout << err.what() << endl;
 		return 1;
